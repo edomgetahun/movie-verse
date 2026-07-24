@@ -17,3 +17,10 @@ export interface MovieDetail extends Omit<Movie, 'genre_ids'> {
   runtime: number;
   genres: { id: number; name: string }[];
 }
+
+export interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}

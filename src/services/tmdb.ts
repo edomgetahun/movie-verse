@@ -1,4 +1,4 @@
-import type { Movie, MovieDetail } from "../types/movie";
+import type { CastMember, Movie, MovieDetail } from "../types/movie";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY as string;
 const BASE_URL = 'https://api.themoviedb.org/3';
@@ -82,5 +82,60 @@ export async function getMovieDetails(id: string): Promise<MovieDetail> {
 
 export async function getTrending(): Promise<Movie[]> {
   const data = await fetchTMDB<DiscoverResponse>('/trending/movie/week');
+  return data.results;
+}
+
+export async function getNowPlaying(page = 1): Promise<Movie[]> {
+  const data = await fetchTMDB<DiscoverResponse>('/movie/now_playing', { page: String(page) });
+  return data.results;
+}
+
+export async function getUpcoming(page = 1): Promise<Movie[]> {
+  const data = await fetchTMDB<DiscoverResponse>('/movie/upcoming', { page: String(page) });
+  return data.results;
+}
+
+interface VideosResponse {
+  results: { key: string; site: string; type: string; official: boolean }[];
+}
+
+// Returns the YouTube key of the best available trailer, or null if none exists.
+export async function getMovieVideos(id: number): Promise<string | null> {
+  const data = await fetchTMDB<VideosResponse>(`/movie/${id}/videos`);
+  const trailer =
+    data.results.find((v) => v.site === 'YouTube' && v.type === 'Trailer' && v.official) ||
+    data.results.find((v) => v.site === 'YouTube' && v.type === 'Trailer');
+  return trailer ? trailer.key : null;
+}
+
+export async function getMovieCredits(id: number): Promise<CastMember[]> {
+  const data = await fetchTMDB<{ cast: CastMember[] }>(`/movie/${id}/credits`);
+  return data.cast.slice(0, 12);
+}
+
+export async function getMovieRecommendations(id: number): Promise<Movie[]> {
+  const data = await fetchTMDB<DiscoverResponse>(`/movie/${id}/recommendations`);
+  return data.results;
+}
+
+export type SortOption =
+  | 'popularity.desc'
+  | 'vote_average.desc'
+  | 'release_date.desc'
+  | 'release_date.asc';
+
+// Flexible discover call used by the genre page's filter/sort controls.
+// Supports combining multiple genres and/or a company id with a sort order.
+export async function discoverMovies(params: {
+  genreIds?: number[];
+  companyId?: number;
+  sortBy?: SortOption;
+  page?: number;
+}): Promise<Movie[]> {
+  const { genreIds, companyId, sortBy = 'popularity.desc', page = 1 } = params;
+  const query: Record<string, string> = { sort_by: sortBy, page: String(page) };
+  if (genreIds && genreIds.length) query.with_genres = genreIds.join(',');
+  if (companyId) query.with_companies = String(companyId);
+  const data = await fetchTMDB<DiscoverResponse>('/discover/movie', query);
   return data.results;
 }
