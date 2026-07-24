@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Movie } from '../types/movie';
+import type { Movie } from '../types/movie';
 import { getMoviesByGenre, getMoviesByCompany } from '../services/tmdb';
 import MovieCard from './MovieCard';
 
@@ -46,7 +46,9 @@ export default function GenreRow({ title, slug, genreId, companyId }: GenreRowPr
     <section className="genre-row">
       <div className="genre-row-header">
         <h2>{title}</h2>
-        <Link to={`/genre/${slug}`} className="see-all">See all →</Link>
+        <Link to={`/genre/${slug}`} className="see-all">
+          See all →
+        </Link>
       </div>
       <div className="reel-divider" aria-hidden="true" />
       {error && <p className="status-text error">{error}</p>}

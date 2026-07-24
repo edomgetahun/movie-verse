@@ -1,12 +1,15 @@
 import { Link, NavLink } from 'react-router-dom';
-import SearchBar from './SearchBar';
+import SearchBar from './SearchBar.tsx';
 
 export default function Navbar() {
   return (
     <header className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="brand">
-          <span className="brand-mark" aria-hidden="true">●</span>CINEVAULT
+          <span className="brand-mark" aria-hidden="true">
+            ●
+          </span>
+          CINEVAULT
         </Link>
         <SearchBar />
         <nav className="nav-links">

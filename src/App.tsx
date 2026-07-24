@@ -3,7 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import GenrePage from './pages/GenrePage';
 import SearchResults from './pages/SearchResults';
-import MovieDetails from './pages/MovieDetails';
+import MovieDetail from './pages/MovieDetails';
 import Downloads from './pages/Downloads';
 import Favorites from './pages/Favorites';
 import { DownloadsProvider } from './context/DownloadsContext';
@@ -21,7 +21,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/genre/:slug" element={<GenrePage />} />
               <Route path="/search" element={<SearchResults />} />
-              <Route path="/movie/:id" element={<MovieDetails />} />
+              <Route path="/movie/:id" element={<MovieDetail />} />
               <Route path="/downloads" element={<Downloads />} />
               <Route path="/favorites" element={<Favorites />} />
             </Routes>
