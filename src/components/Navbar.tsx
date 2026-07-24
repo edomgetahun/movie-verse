@@ -9,7 +9,7 @@ export default function Navbar() {
           <span className="brand-mark" aria-hidden="true">
             ●
           </span>
-          CINEVAULT
+          Movie Verse
         </Link>
         <SearchBar />
         <nav className="nav-links">

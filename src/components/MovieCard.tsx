@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Movie } from '../types/movie';
+import type { Movie } from '../types/movie';
 import { IMAGE_BASE } from '../services/tmdb';
 import { useDownloads } from '../context/DownloadsContext';
 import { useFavorites } from '../context/FavoritesContext';
