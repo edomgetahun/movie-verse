@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg-void: #0a0b0f;
+  --bg-panel: #14161d;
+  --bg-panel-raised: #1c1f29;
+  --marquee-gold: #e3a84e;
+  --marquee-gold-dim: #b9863a;
+  --velvet-red: #a53a4a;
+  --text-primary: #f2ede3;
+  --text-muted: #8b8d97;
+  --border-subtle: rgba(242, 237, 227, 0.08);
+
+  --font-display: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Signature element: a film-strip sprocket divider used under every section
+   heading across the app, echoing a reel running behind the marquee. */
+.reel-divider {
+  height: 10px;
+  margin: 10px 0 24px;
+  background-image: radial-gradient(circle, var(--marquee-gold-dim) 2px, transparent 2px);
+  background-size: 16px 10px;
+  background-position: left center;
+  background-repeat: repeat-x;
+  opacity: 0.55;
+}
+
+.status-text {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.status-text.error {
+  color: var(--velvet-red);
+}
+
+/* Visible keyboard focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--marquee-gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
