@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { Movie } from '../types/movie';
-import { getMoviesByGenre, getMoviesByCompany } from '../services/tmdb';
+import { getMoviesByGenre, getMoviesByCompany, getTrending, getNowPlaying, getUpcoming } from '../services/tmdb';
 import MovieCard from './MovieCard';
+
+type Special = 'trending' | 'now_playing' | 'upcoming';
 
 interface GenreRowProps {
   title: string;
-  slug: string;
+  slug?: string;
   genreId?: number;
   companyId?: number;
+  special?: Special;
 }
 
-export default function GenreRow({ title, slug, genreId, companyId }: GenreRowProps) {
+export default function GenreRow({ title, slug, genreId, companyId, special }: GenreRowProps) {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +24,12 @@ export default function GenreRow({ title, slug, genreId, companyId }: GenreRowPr
     setLoading(true);
     setError(null);
 
-    const request = companyId ? getMoviesByCompany(companyId) : getMoviesByGenre(genreId!);
+    let request: Promise<Movie[]>;
+    if (special === 'trending') request = getTrending();
+    else if (special === 'now_playing') request = getNowPlaying();
+    else if (special === 'upcoming') request = getUpcoming();
+    else if (companyId) request = getMoviesByCompany(companyId);
+    else request = getMoviesByGenre(genreId!);
 
     request
       .then((data) => {
@@ -40,15 +48,13 @@ export default function GenreRow({ title, slug, genreId, companyId }: GenreRowPr
     return () => {
       cancelled = true;
     };
-  }, [genreId, companyId]);
+  }, [genreId, companyId, special]);
 
   return (
     <section className="genre-row">
       <div className="genre-row-header">
         <h2>{title}</h2>
-        <Link to={`/genre/${slug}`} className="see-all">
-          See all →
-        </Link>
+        {slug && <Link to={`/genre/${slug}`} className="see-all">See all →</Link>}
       </div>
       <div className="reel-divider" aria-hidden="true" />
       {error && <p className="status-text error">{error}</p>}
