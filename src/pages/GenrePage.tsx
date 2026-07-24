@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { GENRES, MARVEL_COMPANY_ID, getMoviesByGenre, getMoviesByCompany } from '../services/tmdb';
-import { Movie } from '../types/movie';
+import type { Movie } from '../types/movie';
 import MovieCard from '../components/MovieCard';
 
 export default function GenrePage() {

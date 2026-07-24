@@ -1,4 +1,4 @@
-import { Movie, MovieDetail } from '../types/movie';
+import type { Movie, MovieDetail } from "../types/movie";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY as string;
 const BASE_URL = 'https://api.themoviedb.org/3';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getMovieDetails, BACKDROP_BASE, IMAGE_BASE } from '../services/tmdb';
-import { MovieDetail } from '../types/movie';
+import type { MovieDetail } from '../types/movie';
 import { useDownloads } from '../context/DownloadsContext';
 import { useFavorites } from '../context/FavoritesContext';
 

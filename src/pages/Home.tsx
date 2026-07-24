@@ -1,4 +1,4 @@
-import GenreRow from '../components/GenreRow';
+import GenreRow from '../components/GenreRow.tsx';
 import { GENRES, MARVEL_COMPANY_ID } from '../services/tmdb';
 
 export default function Home() {

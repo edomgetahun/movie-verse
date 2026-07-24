@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { searchMovies } from '../services/tmdb';
-import { Movie } from '../types/movie';
+import type { Movie } from '../types/movie';
 import MovieCard from '../components/MovieCard';
 
 export default function SearchResults() {
