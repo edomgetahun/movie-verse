@@ -39,32 +39,32 @@ TMDB only provides movie metadata and images, not video files. There's no way fo
 
 ### 2. Install dependencies
 
-\`\`\`bash
+```bash
 npm install
 npm install react-router-dom
-\`\`\`
+```
 
 ### 3. Add your API key
 
 Create a `.env` file in the project root (same folder as `package.json`):
 
-\`\`\`
+```
 VITE_TMDB_API_KEY=paste_your_key_here
-\`\`\`
+```
 
 Make sure `.env` is listed in your `.gitignore` so the key never gets committed.
 
 ### 4. Run the dev server
 
-\`\`\`bash
+```bash
 npm run dev
-\`\`\`
+```
 
 Open the printed local URL in your browser.
 
 ## Project structure
 
-\`\`\`
+```
 src/
   types/
     movie.ts               # Movie, MovieDetail, CastMember, DownloadedMovie types
@@ -93,7 +93,7 @@ src/
   App.css                   # All component/page styles
   index.css                 # Design tokens, resets, global typography
   main.tsx                  # React entry point
-\`\`\`
+```
 
 ## Where things come from (TMDB endpoints used)
 
