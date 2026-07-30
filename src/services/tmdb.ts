@@ -5,6 +5,7 @@ const BASE_URL = 'https://api.themoviedb.org/3';
 
 export const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
 export const BACKDROP_BASE = 'https://image.tmdb.org/t/p/original';
+export const LOGO_BASE = 'https://image.tmdb.org/t/p/w92';
 
 async function fetchTMDB<T>(endpoint: string, params: Record<string, string> = {}): Promise<T> {
   if (!API_KEY) {
@@ -138,4 +139,29 @@ export async function discoverMovies(params: {
   if (companyId) query.with_companies = String(companyId);
   const data = await fetchTMDB<DiscoverResponse>('/discover/movie', query);
   return data.results;
+}
+
+export interface WatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string;
+}
+
+export interface WatchProviders {
+  link: string;
+  flatrate?: WatchProvider[]; // subscription streaming (Netflix, Prime, etc.)
+  rent?: WatchProvider[];
+  buy?: WatchProvider[];
+}
+
+interface WatchProvidersResponse {
+  results: Record<string, WatchProviders>;
+}
+
+// TMDB's watch-provider data is sourced from JustWatch and grouped by country
+// code (e.g. "US", "GB"). Ethiopia isn't typically covered, so 'US' is a
+// reasonable default to test against.
+export async function getWatchProviders(id: number, region = 'US'): Promise<WatchProviders | null> {
+  const data = await fetchTMDB<WatchProvidersResponse>(`/movie/${id}/watch/providers`);
+  return data.results[region] || null;
 }

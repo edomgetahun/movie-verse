@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'motion/react';
-import { X, Play, Heart, Download, Check, Star } from 'lucide-react';
+import { X, Play, Heart, Download, Check, Star, ExternalLink } from 'lucide-react';
 import { useMovieModal } from '../context/MovieModalContext';
 import {
   getMovieDetails,
   getMovieVideos,
   getMovieCredits,
   getMovieRecommendations,
+  getWatchProviders,
   BACKDROP_BASE,
   IMAGE_BASE,
 } from '../services/tmdb';
 import type { CastMember, Movie, MovieDetail } from '../types/movie';
+import type { WatchProviders } from '../services/tmdb';
 import { useDownloads } from '../context/DownloadsContext';
 import { useFavorites } from '../context/FavoritesContext';
 import MovieCard from './MovieCard';
@@ -23,6 +25,7 @@ export default function MovieModal() {
   const [showTrailer, setShowTrailer] = useState(false);
   const [cast, setCast] = useState<CastMember[]>([]);
   const [related, setRelated] = useState<Movie[]>([]);
+  const [watchProviders, setWatchProviders] = useState<WatchProviders | null>(null);
   const { isDownloaded, addDownload, removeDownload } = useDownloads();
   const { has, add, remove } = useFavorites();
 
@@ -34,11 +37,13 @@ export default function MovieModal() {
     setShowTrailer(false);
     setCast([]);
     setRelated([]);
+    setWatchProviders(null);
 
     getMovieDetails(String(openMovieId)).then(setMovie);
     getMovieVideos(openMovieId).then(setTrailerKey);
     getMovieCredits(openMovieId).then(setCast);
     getMovieRecommendations(openMovieId).then(setRelated);
+    getWatchProviders(openMovieId).then(setWatchProviders);
   }, [openMovieId]);
 
   // Escape-to-close + lock background scroll while the modal is open
@@ -58,6 +63,15 @@ export default function MovieModal() {
 
   const downloaded = movie ? isDownloaded(movie.id) : false;
   const favorited = movie ? has(movie.id) : false;
+
+  // Where "Watch Now" sends the person: the JustWatch page TMDB gives us for
+  // this exact movie if one exists (it lists every legal place to watch it),
+  // otherwise TMDB's own watch page for the title as a safe fallback.
+  function handleWatchNow() {
+    if (!movie) return;
+    const url = watchProviders?.link || `https://www.themoviedb.org/movie/${movie.id}/watch`;
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
 
   return (
     <AnimatePresence>
@@ -130,10 +144,7 @@ export default function MovieModal() {
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
                     {movie.genres.map((g) => (
-                      <span
-                        key={g.id}
-                        className="rounded-full border border-cream/15 px-3 py-1 text-xs text-cream/80"
-                      >
+                      <span key={g.id} className="rounded-full border border-cream/15 px-3 py-1 text-xs text-cream/80">
                         {g.name}
                       </span>
                     ))}
@@ -141,6 +152,29 @@ export default function MovieModal() {
                   <p className="mt-4 text-sm leading-relaxed text-cream/80">{movie.overview}</p>
 
                   <div className="mt-5 flex flex-wrap gap-3">
+                    <motion.button
+                      onClick={handleWatchNow}
+                      whileHover={{ scale: 1.04 }}
+                      whileTap={{ scale: 0.96 }}
+                      className="group relative inline-flex items-center gap-2 overflow-hidden rounded-md bg-velvet px-5 py-2.5 text-sm font-semibold text-cream"
+                    >
+                      <motion.span
+                        className="absolute inset-0 rounded-md bg-velvet"
+                        animate={{ boxShadow: ['0 0 0 0 rgba(165,58,74,0.55)', '0 0 0 10px rgba(165,58,74,0)'] }}
+                        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
+                      />
+                      <motion.span
+                        className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent"
+                        animate={{ x: ['-100%', '200%'] }}
+                        transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 0.8, ease: 'easeInOut' }}
+                      />
+                      <span className="relative z-10 flex items-center gap-2">
+                        <Play size={16} fill="currentColor" />
+                        Watch Now
+                        <ExternalLink size={14} className="opacity-80" />
+                      </span>
+                    </motion.button>
+
                     <motion.button
                       whileHover={{ scale: 1.03 }}
                       whileTap={{ scale: 0.96 }}
