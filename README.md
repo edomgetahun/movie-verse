@@ -1,118 +1,131 @@
-# MovieVerse
+# MovieVerse 🎬
 
-A modern movie browsing website built with React, TypeScript, and the TMDB API. Browse by genre, search any title, watch trailers, check cast and recommendations, and keep a personal watchlist — all in a dark, cinema-themed UI.
+A modern, cinema-themed movie browsing application built with React, TypeScript, Tailwind CSS, Framer Motion, and the TMDB API. Browse trending titles, search, watch trailers, jump directly to official streaming links, and persist your personal watchlist locally.
 
-## Features
+---
 
-- **Hero banner** — a trending movie with backdrop, synopsis, and quick actions
-- **Genre rows** — Action, Comedy, Romance, Crime, Horror, Sci-Fi, Animation, Drama, Thriller, Fantasy, plus a dedicated Marvel row
-- **Trending Now / New Releases / Coming Soon** rows on the homepage
-- **Search** — find any movie by title
-- **Movie detail modal** — trailer playback (YouTube embed), cast list, and "More Like This" recommendations, all without leaving the page you were browsing
-- **Hover previews** — hovering a poster reveals a short synopsis
-- **Favorites** — save movies you love, persisted in your browser
-- **Downloads / Watchlist** — save movies to a personal list for later (see note below on what this means)
-- **Genre pages** — multi-select genre filters plus sort by popularity, rating, or release date
+## ✨ Features
 
-## A note on "Downloads"
+- **Hero Banner** — Spotlights a trending movie with backdrop artwork, dynamic metadata, and instant play controls.
+- **Interactive Movie Detail Modal** — Deep dive into any movie without losing your place:
+  - Embedded **YouTube Trailer** playback.
+  - Animated **"Watch Now"** action that links directly to official streaming providers via JustWatch.
+  - Full cast list and **"More Like This"** recommendations.
+- **Genre Rows & Filters** — Browse curated feeds (Action, Sci-Fi, Marvel, etc.) and filter/sort on dedicated genre pages.
+- **Search** — Instant title search across the entire TMDB database.
+- **Favorites & Watchlist** — Save titles to your browser's local storage for easy access.
+- **Fluid Micro-Interactions** — Smooth hover effects, modal transitions, and spring animations powered by Framer Motion.
 
-TMDB only provides movie metadata and images, not video files. There's no way for a frontend-only app to offer real downloads without a licensed video source and a backend to serve it. What's built here is a **watchlist that behaves like a download list** — saved locally, listed on its own page — which is the honest and realistic scope for a learning project like this.
+---
 
-## Tech stack
+## ℹ️ A Note on "Watch Now" & "Downloads"
 
-- React + TypeScript
-- Vite
-- React Router
-- TMDB API (themoviedb.org)
-- Plain CSS (no framework) with a custom cinema/marquee design system
-- Browser `localStorage` for Favorites and Downloads (no backend)
+- **Watch Now:** Redirects directly to official external streaming platforms (such as Netflix, Prime Video, Apple TV) using live TMDB provider data powered by JustWatch.
+- **Downloads / Watchlist:** TMDB provides movie metadata and images, not video files. "Downloads" functions as a persistent local watchlist that behaves like an offline queue.
 
-## Getting started
+---
 
-### 1. Get a free TMDB API key
+## 🛠️ Tech Stack
 
-1. Sign up at [themoviedb.org](https://www.themoviedb.org/signup)
-2. Go to your avatar (top right) → **Settings** → **API**
-3. Click **Create** under "Request an API Key" → choose **Developer**
-4. Fill the short form (personal/learning use) — approval is instant
-5. Copy the **API Key (v3 auth)** from the API settings page
+- **Framework & Language:** React 18 + TypeScript
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion (`motion/react`)
+- **Icons:** Lucide React
+- **Routing:** React Router DOM
+- **Data Source:** TMDB API (The Movie Database)
+- **State & Persistence:** React Context + Browser `localStorage`
 
-### 2. Install dependencies
+---
+
+## 🚀 Getting Started
+
+### 1. Get a Free TMDB API Key
+
+1. Sign up at https://www.themoviedb.org/signup
+2. Go to **Settings → API**.
+3. Create a request for a **Developer** API Key.
+4. Copy your **API Key (v3 auth)**.
+
+### 2. Installation
+
+Clone the repository and install the dependencies:
 
 ```bash
 npm install
-npm install react-router-dom
 ```
 
-### 3. Add your API key
+### 3. Environment Setup
 
-Create a `.env` file in the project root (same folder as `package.json`):
+Create a `.env` file in the root directory:
 
+```env
+VITE_TMDB_API_KEY=your_tmdb_api_key_here
 ```
-VITE_TMDB_API_KEY=paste_your_key_here
-```
 
-Make sure `.env` is listed in your `.gitignore` so the key never gets committed.
+> **Note:** Ensure `.env` is included in your `.gitignore` file to protect your API key.
 
-### 4. Run the dev server
+### 4. Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Open the printed local URL in your browser.
+Open the local URL printed in your terminal (typically `http://localhost:5173`).
 
-## Project structure
+---
 
-```
+## 📁 Project Structure
+
+```text
 src/
-  types/
-    movie.ts               # Movie, MovieDetail, CastMember, DownloadedMovie types
-  services/
-    tmdb.ts                 # All TMDB API calls
-  hooks/
-    useLocalStorageList.ts  # Shared localStorage-backed list logic
-  context/
-    DownloadsContext.tsx    # Downloads/watchlist state
-    FavoritesContext.tsx    # Favorites state
-    MovieModalContext.tsx   # Controls which movie's detail modal is open
-  components/
-    Navbar.tsx
-    SearchBar.tsx
-    Hero.tsx                # Homepage hero banner
-    GenreRow.tsx            # Horizontal scrolling row (genre / company / special feeds)
-    MovieCard.tsx           # Poster card with hover preview + favorite/download actions
-    MovieModal.tsx          # Detail modal: trailer, cast, recommendations
-  pages/
-    Home.tsx
-    GenrePage.tsx           # Full grid with genre filter chips + sort
-    SearchResults.tsx
-    Downloads.tsx
-    Favorites.tsx
-  App.tsx                   # Routes + context providers
-  App.css                   # All component/page styles
-  index.css                 # Design tokens, resets, global typography
-  main.tsx                  # React entry point
+├── components/
+│   ├── GenreRow.tsx         # Horizontal scrolling movie collection
+│   ├── Hero.tsx             # Featured homepage hero banner
+│   ├── MovieCard.tsx        # Poster card with dynamic hover effects
+│   ├── MovieModal.tsx       # Rich movie modal (Trailer, Streaming Links, Cast)
+│   ├── Navbar.tsx           # Main site navigation
+│   └── SearchBar.tsx        # Real-time search query input
+├── context/
+│   ├── DownloadsContext.tsx    # Manages local watchlist/downloads
+│   ├── FavoritesContext.tsx    # Manages favorited movies
+│   └── MovieModalContext.tsx   # Controls open modal state
+├── hooks/
+│   └── useLocalStorageList.ts  # Generic hook for browser persistence
+├── lib/
+│   └── motion.ts               # Framer Motion transition configs
+├── pages/
+│   ├── Downloads.tsx           # Saved watchlist view
+│   ├── Favorites.tsx           # Favorites collection view
+│   ├── GenrePage.tsx           # Multi-select filter and sort grid
+│   ├── Home.tsx                # Main landing page feed
+│   ├── MovieDetails.tsx        # Dedicated movie detail page
+│   └── SearchResults.tsx       # Search results page
+├── services/
+│   └── tmdb.ts                 # API client & endpoint helpers
+├── types/
+│   └── movie.ts                # TypeScript interfaces (Movie, Cast, Providers)
+├── App.tsx                     # Providers & Application routes
+├── main.tsx                    # Entry point
+└── index.css                   # Tailwind directives & theme configuration
 ```
 
-## Where things come from (TMDB endpoints used)
+---
 
-| Feature | Endpoint |
-|---|---|
-| Genre rows / genre page | `/discover/movie` (`with_genres`, `sort_by`) |
-| Marvel row | `/discover/movie` (`with_companies=420`) |
-| Search | `/search/movie` |
-| Trending row + hero | `/trending/movie/week` |
-| New Releases | `/movie/now_playing` |
-| Coming Soon | `/movie/upcoming` |
-| Movie detail | `/movie/{id}` |
-| Trailer | `/movie/{id}/videos` |
-| Cast | `/movie/{id}/credits` |
+## 🌐 API Reference
+
+| Feature | TMDB Endpoint |
+|---------|---------------|
+| Movie Details & Providers | `/movie/{id}`, `/movie/{id}/watch/providers` |
+| Trailers & Cast | `/movie/{id}/videos`, `/movie/{id}/credits` |
+| Trending & Feeds | `/trending/movie/week`, `/movie/now_playing`, `/movie/upcoming` |
+| Genres & Discovery | `/discover/movie` |
 | Recommendations | `/movie/{id}/recommendations` |
 
-## Possible next steps
+---
 
-- Debounced search-as-you-type
-- Simple demo login (localStorage-based, no real backend) to personalize the greeting
-- Dark/light theme toggle
-- A real backend if you ever want Favorites/Downloads to sync across devices
+## 🔮 Future Enhancements
+
+- [ ] Backend integration with a database for user accounts and cloud storage.
+- [ ] Debounced search-as-you-type in the navbar.
+- [ ] User profile customization & preference syncing.
